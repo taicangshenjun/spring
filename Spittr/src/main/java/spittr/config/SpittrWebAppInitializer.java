@@ -1,5 +1,8 @@
 package spittr.config;
 
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.ServletRegistration.Dynamic;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class SpittrWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -19,4 +22,12 @@ public class SpittrWebAppInitializer extends AbstractAnnotationConfigDispatcherS
 		return new String[] {"/"};
 	}
 
+	/**
+	 * 将上传文件的临时存储目录设置在“/tmp/spittr/uploads”中
+	 */
+	@Override
+	protected void customizeRegistration(Dynamic registration) {
+		registration.setMultipartConfig(new MultipartConfigElement("/tmp/spitter/uploads"));
+	}
+	
 }
