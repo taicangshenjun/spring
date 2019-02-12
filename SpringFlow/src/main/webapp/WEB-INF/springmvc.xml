@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:flow="http://www.springframework.org/schema/webflow-config"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+        <!-- 自动扫描controller包下的所有类，使其认为是spring mvc的控制器 路径即为类路径 -->
+        <context:component-scan base-package="com"></context:component-scan>
+
+
+        <!-- 配置视图解析器 如何把handler 方法返回值解析为实际的物理视图  根据控制器返回的字符串拼接成jsp路径：/WEB-INF/jsp/xx.jsp -->
+        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="prefix" value="/WEB-INF/views/"></property>
+            <property name="suffix" value=".jsp"></property>
+        </bean>
+        
+        <!-- flow-executor流程执行器 -->
+    	<flow:flow-executor id="flowExecutor"/>
+    	
+    	<!-- 流程注册表 -->
+	    <flow:flow-registry id="flowRegistry" base-path="/WEB-INF/flows">
+	        <!-- 这样，结合base-path属性，凡是在base-path下，且以-flow.xml结尾的文件都将视为流程定义 -->
+	        <flow:flow-location-pattern value="*-flow.xml"/>
+	        <!-- 当然，也可以不要base-path，像下面这样直接定义 ,id可以不写,访问这个流程的时候用/id即可-->
+	        <flow:flow-location path="/WEB-INF/flows/springpizza.xml" id="pizza"/>
+	    </flow:flow-registry>
+    	
+    	
+    	
+</beans>
