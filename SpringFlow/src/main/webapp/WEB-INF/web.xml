@@ -17,7 +17,7 @@
   	<!-- 配置springMvc的配置文件及位置 -->
   	<init-param>
   		<param-name>contextConfigLocation</param-name>
-  		<param-value>/WEB-INF/springmvc.xml</param-value>
+  		<param-value>/WEB-INF/config/spring-*.xml</param-value>
   	</init-param>
   	<!-- 
 	  	标记容器是否在启动的时候就加载这个servlet
@@ -26,6 +26,11 @@
   	 -->
   	<load-on-startup>1</load-on-startup>
   </servlet>
+  
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+  
   <servlet-mapping>
   	<servlet-name>SpringFlow</servlet-name>
   	<url-pattern>/</url-pattern>

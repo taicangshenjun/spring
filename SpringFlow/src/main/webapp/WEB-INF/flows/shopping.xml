@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/webflow
+ http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+ 
+ <!-- view-state中的view对应view文件夹中的jsp页面，on是触发事件，to对应state id -->
+ <!-- 
+ 	在 view-state 元素中指定了 view 属性的名字，这个名字也是 Spring Web MVC 中 viewResolver 
+ 	（在webmvc-config.xml中定义）所查找的 view 的名字。
+ 	
+  -->
+ 
+    <view-state id="viewCart" view="viewCart">
+        <transition on="submit" to="viewOrder">
+        </transition>
+    </view-state>
+    
+    <view-state id="viewOrder" view="viewOrder">
+        <transition on="confirm" to="orderConfirmed">
+        </transition>
+    </view-state>
+    
+    <view-state id="orderConfirmed" view="orderConfirmed">
+        <transition on="returnToIndex" to="returnToIndex">
+        </transition>
+    </view-state>
+    
+    <!-- 
+    	end-state 指明了当 flow 执行结束后跳转到初始的 index.jsp。
+    	externalRedirect 用在 view 名字中，表示所指向的资源是在 flow 的外部， 
+    	servletRelative 则表明所指向资源的路径起始部分与 flow 所在 servlet 相同。
+    -->
+    <end-state id="returnToIndex" view="externalRedirect:servletRelative:/index.jsp">
+    </end-state>
+    
+</flow>

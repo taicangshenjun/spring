@@ -13,22 +13,25 @@
 
 
         <!-- 配置视图解析器 如何把handler 方法返回值解析为实际的物理视图  根据控制器返回的字符串拼接成jsp路径：/WEB-INF/jsp/xx.jsp -->
-        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
             <property name="prefix" value="/WEB-INF/views/"></property>
             <property name="suffix" value=".jsp"></property>
         </bean>
         
-        <!-- flow-executor流程执行器 -->
-    	<flow:flow-executor id="flowExecutor"/>
-    	
-    	<!-- 流程注册表 -->
-	    <flow:flow-registry id="flowRegistry" base-path="/WEB-INF/flows">
-	        <!-- 这样，结合base-path属性，凡是在base-path下，且以-flow.xml结尾的文件都将视为流程定义 -->
-	        <flow:flow-location-pattern value="*-flow.xml"/>
-	        <!-- 当然，也可以不要base-path，像下面这样直接定义 ,id可以不写,访问这个流程的时候用/id即可-->
-	        <flow:flow-location path="/WEB-INF/flows/springpizza.xml" id="pizza"/>
-	    </flow:flow-registry>
-    	
-    	
+        <bean id="viewMappings" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        	<!-- /shopping.do 请求由 flowController 来处理 -->
+        	<property name="mappings">
+        		<value>/shopping.do=flowController</value>
+        	</property>
+        	<property name="defaultHandler">
+        		<!-- UrlFilenameViewController 会将 "/index" 这样的请求映射成名为 "index" 的视图 -->
+        		<bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+        	</property>
+        </bean>
+        
+        <bean id="flowController" class="org.springframework.webflow.mvc.servlet.FlowController">
+	        <property name="flowExecutor" ref="flowExecutor"/>
+	    </bean>
     	
 </beans>
