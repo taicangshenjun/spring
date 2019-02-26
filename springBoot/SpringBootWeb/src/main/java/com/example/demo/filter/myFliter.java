@@ -38,6 +38,7 @@ public class myFliter implements Filter {
 				System.out.println("param:" + param + ",value:" + value);
 			}
 		}
+		chain.doFilter(request, response);
 	}
 
 }
