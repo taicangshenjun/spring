@@ -7,6 +7,11 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,11 +24,34 @@ import com.example.demo.domain.User;
 public class UserController {
 
 	@Autowired
+	@Qualifier("userRepository")
 	private UserRepository userRepository;
 	
 	@RequestMapping("/findAll")
 	public List<User> findAll(Model model, HttpServletRequest request){
 		List<User> resultList = userRepository.findAll();
+		return resultList;
+	}
+	
+	@RequestMapping("/findByAgeGreaterThanEqual")
+	public List<User> findByAgeGreaterThanEqual(Model model, HttpServletRequest request) {
+		String ageStr = request.getParameter("age");
+		List<User> resultList = null;
+		if(ageStr != null && !"".equals(ageStr)) {
+			Integer age = Integer.parseInt(ageStr);
+			resultList = userRepository.findByAgeGreaterThanEqual(age);
+		}
+		return resultList;
+	}
+	
+	@RequestMapping("/findList")
+	public List<User> findList(Model model, HttpServletRequest request){
+		//页数从0开始
+		int page = 0;
+		int size = 10;
+		Sort sort = new Sort(Direction.DESC, "age");
+		Pageable pageable = PageRequest.of(page, size, sort);
+		List<User> resultList = userRepository.findList(pageable);
 		return resultList;
 	}
 	

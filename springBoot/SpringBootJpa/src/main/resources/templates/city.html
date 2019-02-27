@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h4>城市列表！</h4>
+	<table>
+		<thead>
+			<tr>
+				<th>城市</th>
+				<th>城市编码</th>
+				<th>描述</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="city:${resultList}">
+				<th th:text="${city.cityName}"></th>
+				<th th:text="${city.cityCode}"></th>
+				<th th:text="${city.description}"></th>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
