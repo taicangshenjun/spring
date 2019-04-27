@@ -1,0 +1,33 @@
+server:
+  port: 8762
+spring:
+  jpa:
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.229.1:3306/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    username: root
+    password: 920925
+  application:
+    ##注册到eureka server上的应用名称
+    name: microservice-provider-user
+
+eureka:
+  client:
+    service-url:
+      ##与eureka server交互的地址，查询服务和注册服务都依赖这个地址
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    ##将ip配置到eureka server
+    prefer-ip-address: true
+    
+info:
+  app:
+    name: project.artofactId@
+    encoding: project.build.sourceEncoding@
+    java:
+      source: java.version
+      target: java.target

@@ -1,0 +1,16 @@
+server:
+  port: 8761
+eureka:
+  client:
+    ##是否将自己注册到eureka server
+    register-with-eureka: false
+    ##是否从eureka server获取注册信息
+    fetch-registry: false
+    service-url:
+      ##与eureka server交互的地址，查询服务和注册服务都依赖这个地址
+      defaultZone: http://admin:c9t5z2e7@localhost:8761/eureka/
+spring:
+  security:
+    user:
+      name: admin
+      password: c9t5z2e7
