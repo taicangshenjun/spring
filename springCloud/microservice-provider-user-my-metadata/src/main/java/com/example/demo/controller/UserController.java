@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +21,14 @@ public class UserController {
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
 	
-	@GetMapping("/findById/{id}")
+	/**
+	 * request头,application/json;charset=UTF-8返回json
+	 */
+	@GetMapping(value = "/findById/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public User findById(@PathVariable("id") String id) {
 		//Optional类中有个get()方法，返回的是当前对象/值
-		Optional<User> userOpt= userRepository.findById(id);
-		return userOpt.get();
+		Optional<User> userOpt = userRepository.findById(id);
+		return userOpt.isPresent()? userOpt.get(): null;
 	}
 	
 }
