@@ -3,6 +3,7 @@ package com.spring.custom.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,14 +43,18 @@ public class DispatcherServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doGet(req, resp);
+		System.out.println("doGet()......");
+		this.doPost(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		super.doPost(req, resp);
+		System.out.println("doPost()......");
+		
+		String uri = req.getRequestURI();
+		String context = req.getContextPath();
+		String path = uri.replaceAll(uri, context);
+		
 	}
 
 	@Override
@@ -175,15 +180,32 @@ public class DispatcherServlet extends HttpServlet {
 				}
 			}
 		}
-		
-		
-		
-		
-		
 	}
 	
 	private void handlerMapping() {
-		
+		if(beans.isEmpty()) {
+			System.out.println("no class is instance......");
+			return;
+		}
+		for(Map.Entry<String, Object> map: beans.entrySet()) {
+			Object instance = map.getValue();
+			Class<?> clazz = instance.getClass();
+			if(clazz.isAnnotationPresent(CustomController.class)) {
+				CustomRequestMapping clazzRm = clazz.getAnnotation(CustomRequestMapping.class);
+				String clazzPath = clazzRm.value();
+				Method[] methods = clazz.getMethods();
+				for(Method method: methods) {
+					if(method.isAnnotationPresent(CustomRequestMapping.class)) {
+						CustomRequestMapping methodRm = method.getAnnotation(CustomRequestMapping.class);
+						String methodPath = methodRm.value();
+						handlerMap.put(clazzPath + methodPath, method);
+					}
+				}
+			}else {
+				continue;
+			}
+			
+		}
 	}
 	
 }
