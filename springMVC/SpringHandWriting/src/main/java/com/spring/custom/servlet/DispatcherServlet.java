@@ -3,6 +3,7 @@ package com.spring.custom.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ import com.spring.custom.annotation.CustomController;
 import com.spring.custom.annotation.CustomQualifier;
 import com.spring.custom.annotation.CustomRequestMapping;
 import com.spring.custom.annotation.CustomService;
+import com.spring.custom.controller.MyController;
+import com.spring.custom.handlerAdapter.HandlerAdapterService;
 
 public class DispatcherServlet extends HttpServlet {
 
@@ -55,6 +58,24 @@ public class DispatcherServlet extends HttpServlet {
 		String context = req.getContextPath();
 		String path = uri.replaceAll(uri, context);
 		
+		Method method = (Method) handlerMap.get(path);
+		MyController instance = (MyController) beans.get("/" + path.split("/")[1]);
+		
+		HandlerAdapterService ha = (HandlerAdapterService) beans.get("customHandlerAdapter");
+		Object[] args = ha.handle(req, resp, method, beans);
+		
+		try {
+			method.invoke(instance, args);
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
