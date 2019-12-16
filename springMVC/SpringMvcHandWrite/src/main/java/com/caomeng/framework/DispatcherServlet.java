@@ -78,7 +78,6 @@ public class DispatcherServlet extends HttpServlet {
             	try {
 					handleViewResult((View) result, request, response);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
             } else if (result instanceof Data) {
@@ -100,7 +99,9 @@ public class DispatcherServlet extends HttpServlet {
 	}
 	
 	/**
-	 * 
+	 * DefaultServlet和JspServlet都是由Web容器创建
+	 * org.apache.catalina.servlets.DefaultServlet
+	 * org.apache.jasper.servlet.JspServlet
 	 * @param servletContext
 	 */
 	private void registerServlet(ServletContext servletContext) {
@@ -123,8 +124,10 @@ public class DispatcherServlet extends HttpServlet {
 		String path = view.getPath();
 		if(StringUtils.isNotEmpty(path)) {
 			if(path.startsWith("/")) {
+				//重定向
 				response.sendRedirect(request.getContextPath() + path);
 			}else {
+				//请求转发
 				Map<String, Object> model = view.getModel();
 				for(Map.Entry<String, Object> entry: model.entrySet())
 					request.setAttribute(entry.getKey(), entry.getValue());

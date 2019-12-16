@@ -22,7 +22,7 @@ public class View {
 
     public View(String path) {
         this.path = path;
-        model = new HashMap<String, Object>();
+        this.model = new HashMap<String, Object>();
     }
 
     public View addModel(String key, Object value) {

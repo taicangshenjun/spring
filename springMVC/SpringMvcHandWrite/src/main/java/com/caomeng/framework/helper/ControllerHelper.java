@@ -33,7 +33,8 @@ public final class ControllerHelper {
 		Set<Class<?>> controllerSet = ClassHelper.getControllerClassSet();
 		if(CollectionUtils.isNotEmpty(controllerSet)) {
 			for(Class<?> controller: controllerSet) {
-				Method[] methods = controller.getDeclaredMethods();
+				//获取所有公共方法
+				Method[] methods = controller.getMethods();
 				if(ArrayUtils.isNotEmpty(methods)) {
 					for(Method method: methods) {
 						if(method.isAnnotationPresent(RequestMapping.class)) {
