@@ -1,0 +1,72 @@
+server:
+  port: 8020
+#  servlet:
+#    context-path: /mall-order
+
+spring:
+  application:
+    name: mall-order  #微服务名称
+
+  #配置nacos注册中心地址
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.1.105:8848
+        #group:  mall-order
+        #cluster-name: SH
+        ephemeral: false
+  #数据库配置
+  datasource:
+    dynamic:
+      primary: myhome
+      strict: false
+      datasource:
+        myhome:
+          url: jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          username: root
+          password: 123456
+          driver-class-name: com.mysql.cj.jdbc.Driver
+        tuling:
+          url: jdbc:mysql://192.168.1.105:3306/test?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+          username: root
+          password: 920925
+          driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 10
+      max-active: 100
+      min-idle: 10
+      max-wait: 60000
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+      filter:
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 1000
+          merge-sql: false
+        wall:
+          config:
+            multi-statement-allow: true
+
+dubbo:
+  scan:
+    # 指定 Dubbo 服务实现类的扫描基准包
+    base-packages: com.tuling.mall.order.service
+  application:
+    name: ${spring.application.name}
+  protocol:
+    # dubbo 协议
+    name: dubbo
+    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+    port: -1
+#  registry:
+#    #挂载到 Spring Cloud 注册中心  高版本可选
+#    address: spring-cloud://192.168.1.104:8848
